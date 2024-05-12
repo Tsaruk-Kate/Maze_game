@@ -1,5 +1,4 @@
-﻿using labyrinth_gamе.Views;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,8 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using labyrinth_gamе.Views;
 
-namespace labyrinth_gamе
+namespace labyrinth_gamе.Views
 {
     public partial class Levels : Page
     {
@@ -35,6 +35,13 @@ namespace labyrinth_gamе
             Window window = Application.Current.MainWindow;
             Level_1 windowLevel1 = new Level_1();
             windowLevel1.Show();
+            window.Close();
+        }
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            Window window = Application.Current.MainWindow;
+            Level_2 windowLevel2 = new Level_2();
+            windowLevel2.Show();
             window.Close();
         }
     }
