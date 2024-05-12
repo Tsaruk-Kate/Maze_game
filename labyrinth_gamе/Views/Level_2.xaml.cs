@@ -40,14 +40,19 @@ namespace labyrinth_gamе.Views
             GenerateMaze();
             DrawMaze();
             DrawPlayer();
+            InitializeTimer();
+        }
+        private void InitializeTimer()
+        {
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += Timer_Tick;
             timer.Start();
         }
+
         private void Timer_Tick(object sender, EventArgs e)
         {
-            if (!isPaused)
+            if (!IsPaused())
             {
                 timeElapsed++;
 
@@ -56,17 +61,21 @@ namespace labyrinth_gamе.Views
                 TimeLabel.Content = $"Часу минуло: {minutes:D2}:{seconds:D2}";
             }
         }
+        private bool IsPaused()
+        {
+            return state is PausedState;
+        }
         private void GenerateMaze()
         {
             int rows = 20;
             int cols = 35;
             maze = new int[rows, cols];
-            this.entranceRow = rows / 2;
-            this.entranceCol = 0;
-            maze[this.entranceRow, this.entranceCol] = (int)TileType2.Start;
-            this.exitRow = rand.Next(1, rows - 2);
-            this.exitCol = cols - 1;
-            maze[this.exitRow, this.exitCol] = (int)TileType2.End;
+            entranceRow = rows / 2;
+            entranceCol = 0;
+            maze[entranceRow, entranceCol] = (int)TileType2.Start;
+            exitRow = rand.Next(1, rows - 2);
+            exitCol = cols - 1;
+            maze[exitRow, exitCol] = (int)TileType2.End;
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < cols; j++)
@@ -75,10 +84,9 @@ namespace labyrinth_gamе.Views
                 }
             }
             GenerateMazeRecursive(entranceRow, entranceCol, rows, cols);
-            maze[this.exitRow + 1, this.exitCol] = (int)TileType2.Path;
-            maze[this.exitRow + 1, this.exitCol] = (int)TileType2.Path;
-            maze[this.entranceRow, this.entranceCol] = (int)TileType2.Start;
-            maze[this.exitRow, this.exitCol] = (int)TileType2.End;
+            maze[exitRow + 1, exitCol] = (int)TileType2.Path;
+            maze[entranceRow, entranceCol] = (int)TileType2.Start;
+            maze[exitRow, exitCol] = (int)TileType2.End;
         }
         private void GenerateMazeRecursive(int row, int col, int totalRows, int totalCols)
         {
@@ -187,34 +195,11 @@ namespace labyrinth_gamе.Views
             {
                 if (maze[newRow, newCol] != (int)TileType2.Wall)
                 {
-                    if (newRow == exitRow && newCol == exitCol)
+                    if (CheckExitCollision(newRow, newCol))
                     {
-                        playerRect.SetValue(Canvas.LeftProperty, newX);
-                        playerRect.SetValue(Canvas.TopProperty, newY);
-                        if (newRow == exitRow && newCol == exitCol)
-                        {
-                            timer.Stop();
-                            timeTaken = timeElapsed;
-                            CustomMessageBox messageBox = new CustomMessageBox("");
-                            Record record = new Record
-                            {
-                                UserId = User.CurrentUser.UserId,
-                                UserName = User.CurrentUser.UserName,
-                                Level = 2,
-                                Time = timeTaken + " сек"
-                            };
-                            using (var db = new DataBaseContext())
-                            {
-                                db.Records.Add(record);
-                                db.SaveChanges();
-                            }
-                            messageBox.messageBoxText.Text = $"Вітаємо, ви виграли! Витрачено часу: {timeTaken} секунд.";
-                            messageBox.ShowDialog();
-                            Close();
-                        }
+                        HandleExitCollision(newRow, newCol);
                     }
-                    else if ((Math.Abs(newRow - (int)(Canvas.GetTop(playerRect) / tileSize)) == 1 && newCol == (int)(Canvas.GetLeft(playerRect) / tileSize) && maze[newRow, newCol] != (int)TileType.Wall)
-                          || (Math.Abs(newCol - (int)(Canvas.GetLeft(playerRect) / tileSize)) == 1 && newRow == (int)(Canvas.GetTop(playerRect) / tileSize) && maze[newRow, newCol] != (int)TileType.Wall))
+                    else if (CheckMovementValidity(newRow, newCol))
                     {
                         playerRect.SetValue(Canvas.LeftProperty, newX);
                         playerRect.SetValue(Canvas.TopProperty, newY);
@@ -222,11 +207,42 @@ namespace labyrinth_gamе.Views
                 }
             }
         }
+        private bool CheckExitCollision(int newRow, int newCol)
+        {
+            return newRow == exitRow && newCol == exitCol;
+        }
+
+        private void HandleExitCollision(int newRow, int newCol)
+        {
+            timer.Stop();
+            timeTaken = timeElapsed;
+            CustomMessageBox messageBox = new CustomMessageBox("");
+            Record record = new Record
+            {
+                UserId = User.CurrentUser.UserId,
+                UserName = User.CurrentUser.UserName,
+                Level = 2,
+                Time = timeTaken + " сек"
+            };
+            using (var db = new DataBaseContext())
+            {
+                db.Records.Add(record);
+                db.SaveChanges();
+            }
+            messageBox.messageBoxText.Text = $"Вітаємо, ви виграли! Витрачено часу: {timeTaken} секунд.";
+            messageBox.ShowDialog();
+            Close();
+        }
+
+        private bool CheckMovementValidity(int newRow, int newCol)
+        {
+            return (Math.Abs(newRow - (int)(Canvas.GetTop(playerRect) / tileSize)) == 1 && newCol == (int)(Canvas.GetLeft(playerRect) / tileSize) && maze[newRow, newCol] != (int)TileType.Wall)
+                        || (Math.Abs(newCol - (int)(Canvas.GetLeft(playerRect) / tileSize)) == 1 && newRow == (int)(Canvas.GetTop(playerRect) / tileSize) && maze[newRow, newCol] != (int)TileType.Wall);
+        }
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             state.HandleKeyPress(e.Key);
         }
-        private bool isPaused = false;
         private void Image_MouseDown_16(object sender, MouseButtonEventArgs e)
         {
             PauseGame();
@@ -272,38 +288,33 @@ namespace labyrinth_gamе.Views
         {
             void HandleKeyPress(Key key);
         }
+
         public class PlayingState : IGameState
         {
             private readonly Level_2 _context;
+
             public PlayingState(Level_2 context)
             {
                 _context = context;
             }
+
             public void HandleKeyPress(Key key)
             {
                 switch (key)
                 {
                     case Key.Left:
-                        _context.MovePlayer(-32, 0);
-                        break;
-                    case Key.Right:
-                        _context.MovePlayer(32, 0);
-                        break;
-                    case Key.Up:
-                        _context.MovePlayer(0, -32);
-                        break;
-                    case Key.Down:
-                        _context.MovePlayer(0, 32);
-                        break;
                     case Key.A:
                         _context.MovePlayer(-32, 0);
                         break;
+                    case Key.Right:
                     case Key.D:
                         _context.MovePlayer(32, 0);
                         break;
+                    case Key.Up:
                     case Key.W:
                         _context.MovePlayer(0, -32);
                         break;
+                    case Key.Down:
                     case Key.S:
                         _context.MovePlayer(0, 32);
                         break;
@@ -321,11 +332,7 @@ namespace labyrinth_gamе.Views
 
             public void HandleKeyPress(Key key)
             {
-                if (key == Key.Escape)
-                {
-                    _context.ResumeGame();
-                }
-                else if (key == Key.Enter)
+                if (key == Key.Escape || key == Key.Enter)
                 {
                     _context.ResumeGame();
                 }
