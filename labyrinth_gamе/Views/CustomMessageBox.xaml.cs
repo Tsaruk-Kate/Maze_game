@@ -55,6 +55,23 @@ namespace labyrinth_gamе.Views
         {
             Application.Current.Shutdown();
         }
-        
+        private void Button_Results(object sender, RoutedEventArgs e)
+        {
+            Frame frame = new Frame();
+            Window mainWindow = new MainWindow();
+            frame.Navigate(new Results());
+            mainWindow.Content = frame;
+            mainWindow.Show();
+            this.Close();
+        }
+        private void Button_Rules(object sender, RoutedEventArgs e)
+        {
+            Frame frame = new Frame();
+            Window mainWindow = new MainWindow();
+            frame.Navigate(new Rules());
+            mainWindow.Content = frame;
+            mainWindow.Show();
+            this.Close();
+        }
     }
 }
