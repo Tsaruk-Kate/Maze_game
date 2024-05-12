@@ -25,6 +25,12 @@
     <Compile Update="Views\Level_3.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Rules.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Rules_2.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\Levels.xaml">
@@ -46,6 +52,12 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Level_3.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Rules.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Rules_2.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

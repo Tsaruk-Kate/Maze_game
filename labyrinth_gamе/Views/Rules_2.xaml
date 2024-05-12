@@ -1,0 +1,42 @@
+﻿<Page x:Class="labyrinth_gamе.Views.Rules_2"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:labyrinth_gamе.Views"
+      mc:Ignorable="d" 
+            d:DesignHeight="700" d:DesignWidth="400"
+      Title="labyrinth" MinHeight="700" MinWidth="400" MaxHeight="700" MaxWidth="400">
+
+    <Page.Background>
+        <ImageBrush ImageSource="/Views/Background.jpg"/>
+    </Page.Background>
+
+    <Grid MinHeight="700" MinWidth="400" MaxHeight="700" MaxWidth="400">
+        <TextBlock Text="Правила" VerticalAlignment="Top" Margin="0,32,0,0" FontFamily="Segoe Print" FontSize="40" Height="66" Width="176" FontWeight="Bold" HorizontalAlignment="Center"/>
+        <Image Source="/Views/arrow-left.png" MinHeight="40" MinWidth="80" MaxHeight="40" MaxWidth="80"  MouseDown="Image_MouseDown_ArrowL" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,586,0,0" />
+
+        <Image Margin="149,102,149,542" RenderTransformOrigin="0.733,0.163" Source="/Views/rules.png" MinHeight="55" MinWidth="100" MaxHeight="55" MaxWidth="100"/>
+        <Image Source="/Views/home.png" Margin="173,586,0,0"  MouseDown="Image_MouseDown_6" MinHeight="40" MinWidth="50" MaxHeight="40" MaxWidth="50" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Image MinHeight="40" MinWidth="80" MaxHeight="40" MaxWidth="80" Source="/Views/exit.png" Margin="335,586,0,0" MouseDown="Image_MouseDown_Exit" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+
+        <ScrollViewer MinHeight="350" MinWidth="350" MaxHeight="350" MaxWidth="350" Margin="-5,179,5,111" BorderBrush="#FF110D0D">
+            <Border BorderThickness="2" BorderBrush="Black" CornerRadius="10">
+                <TextBlock Padding="10" Background="#80FFFFFF" FontFamily="Segoe Print" FontSize="20" TextWrapping="Wrap">
+            
+                    1)Ваша мета - знайти вихід з лабіринту.
+2) Використовуйте клавіші зі стрілками або клавіші WASD для переміщення гравця.
+3) Уникайте стін та перешкод, які блокують ваш шлях.
+4) Збирайте діаманти, які розсіяні по лабіринту.
+5) Всі діаманти мають бути зібрані, перш ніж ви зможете досягти виходу.
+6) Коли ви досягаєте виходу і всі діаманти зібрані, ви перемагаєте.
+7) Гра призупиняється, якщо натиснути кнопку паузи. Натисніть ОК, щоб продовжити гру.
+8) Щоб розпочати гру знову, натисніть кнопку перезавантаження.
+9) Щоб повернутися до головного меню, натисніть кнопку виходу.
+10) Ви можете слідкувати за часом, який ви витратили на гру, на екрані.
+                </TextBlock>
+            </Border>
+        </ScrollViewer>
+        <Label Content="Рівень 3" Margin="146,162,146,496" FontFamily="Segoe Print" FontSize="20"/>
+    </Grid>
+</Page>
