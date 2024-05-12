@@ -1,0 +1,40 @@
+﻿<Page x:Class="labyrinth_gamе.Views.Rules"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:labyrinth_gamе.Views"
+      mc:Ignorable="d" 
+                    d:DesignHeight="700" d:DesignWidth="400"
+      Title="labyrinth" MinHeight="700" MinWidth="400" MaxHeight="700" MaxWidth="400">
+
+    <Page.Background>
+        <ImageBrush ImageSource="/Views/Background.jpg"/>
+    </Page.Background>
+
+    <Grid MinHeight="700" MinWidth="400" MaxHeight="700" MaxWidth="400">
+        <TextBlock Text="Правила" VerticalAlignment="Top" Margin="0,32,0,0" FontFamily="Segoe Print" FontSize="40" Height="66" Width="176" FontWeight="Bold" HorizontalAlignment="Center"/>
+        <Image Margin="149,102,149,542" RenderTransformOrigin="0.733,0.163" Source="/Views/rules.png" MinHeight="55" MinWidth="100" MaxHeight="55" MaxWidth="100"/>
+        <Image Source="/Views/home.png" Margin="25,586,0,0"  MouseDown="Image_MouseDown_6" MinHeight="40" MinWidth="50" MaxHeight="40" MaxWidth="50" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <Image Source="/Views/arrow-right.png" Margin="331,586,0,0" MinHeight="40" MinWidth="80" MaxHeight="40" MaxWidth="80" MouseDown="Image_MouseDown_ArrowR" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+
+        <ScrollViewer MinHeight="350" MinWidth="350" MaxHeight="350" MaxWidth="350" Margin="0,179,0,111" BorderBrush="#FF110D0D">
+            <Border BorderThickness="2" BorderBrush="Black" CornerRadius="10">
+                <TextBlock Padding="10" Background="#80FFFFFF" FontFamily="Segoe Print" FontSize="20" TextWrapping="Wrap">
+            
+                    1)Мета гри полягає в тому, щоб дійти від початкової точки до кінцевої точки лабіринту.
+2) Гравець керує зеленим прямокутником, який представляє собою гравця в лабіринті.
+3) Гравець може переміщатися вгору, вниз, вліво та вправо за допомогою стрілок на клавіатурі або клавіш WASD.
+4) Гравець може рухатися лише по шляху (яскраво-жовті клітинки) лабіринту. Він не може пересуватися через стіни (темно-зелені клітинки).
+5) Гравець не може виходити за межі лабіринту. Він повинен залишатися всередині граничних стін.
+6) Якщо гравець досягає кінцевої точки лабіринту, він перемагає.
+7) Гра має таймер, який показує час, який гравець витратив на пройдення лабіринту.
+8) Гра може бути призупинена за допомогою кнопки "Пауза". Призупинення гри зупиняє таймер і відображає повідомлення про паузу. Гра може бути продовжена після паузи.
+9) Гра може бути перезапущена за допомогою кнопки "Перезапустити". Перезапуск гри відновлює початкове положення гравця і генерує новий лабіринт.
+10) Гра може бути закрита за допомогою кнопки "Вихід", яка повертає гравця до головного меню.
+                </TextBlock>
+            </Border>
+        </ScrollViewer>
+        <Label Content="Рівень 1,2" Margin="139,162,139,496" FontFamily="Segoe Print" FontSize="20"/>
+    </Grid>
+</Page>

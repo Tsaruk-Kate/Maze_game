@@ -8,17 +8,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="home.png" />
-    <None Remove="level-up.png" />
     <None Remove="trophy.png" />
+    <None Remove="Views\arrow-left.png" />
+    <None Remove="Views\arrow-right.png" />
     <None Remove="Views\Background.jpg" />
     <None Remove="Views\back_level1.jpg" />
+    <None Remove="Views\back_level2.jpg" />
+    <None Remove="Views\back_level3.jpg" />
     <None Remove="Views\exit.png" />
     <None Remove="Views\home.png" />
     <None Remove="Views\level-up.png" />
     <None Remove="Views\maze.png" />
     <None Remove="Views\pause.png" />
     <None Remove="Views\rules.png" />
+    <None Remove="Views\trophy.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,17 +34,20 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="home.png" />
-    <Resource Include="level-up.png" />
     <Resource Include="trophy.png" />
+    <Resource Include="Views\arrow-left.png" />
+    <Resource Include="Views\arrow-right.png" />
     <Resource Include="Views\Background.jpg" />
     <Resource Include="Views\back_level1.jpg" />
+    <Resource Include="Views\back_level2.jpg" />
+    <Resource Include="Views\back_level3.jpg" />
     <Resource Include="Views\exit.png" />
     <Resource Include="Views\home.png" />
     <Resource Include="Views\level-up.png" />
     <Resource Include="Views\maze.png" />
     <Resource Include="Views\pause.png" />
     <Resource Include="Views\rules.png" />
+    <Resource Include="Views\trophy.png" />
   </ItemGroup>
 
 </Project>

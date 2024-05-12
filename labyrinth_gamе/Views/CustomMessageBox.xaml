@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:labyrinth_gamе.Views"
         mc:Ignorable="d"
-                        Title="" Height="400" Width="800"  WindowStyle="None"  Background="Transparent" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+                Title="" Height="400" Width="800"  WindowStyle="None"  Background="Transparent" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+    </Window.Resources>
     <Grid>
         <Border BorderBrush="DarkGreen" BorderThickness="5" CornerRadius="40" >
             <Border.Background>

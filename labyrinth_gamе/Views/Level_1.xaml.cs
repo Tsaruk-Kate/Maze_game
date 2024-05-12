@@ -34,37 +34,61 @@ namespace labyrinth_gamе.Views
         public Level_1()
         {
             InitializeComponent();
-            this.WindowState = WindowState.Maximized;
+            InitializeWindow();
             GenerateMaze();
             DrawMaze();
             DrawPlayer();
+            InitializeTimer();
+        }
+        private void InitializeWindow()
+        {
+            this.WindowState = WindowState.Maximized;
+        }
+
+        private void InitializeTimer()
+        {
             timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += Timer_Tick;
             timer.Start();
         }
+
         private void Timer_Tick(object sender, EventArgs e)
         {
             if (!isPaused)
             {
-                timeElapsed++;
-
-                int minutes = timeElapsed / 60;
-                int seconds = timeElapsed % 60;
-                TimeLabel.Content = $"Часу минуло: {minutes:D2}:{seconds:D2}";
+                UpdateElapsedTime();
             }
+        }
+
+        private void UpdateElapsedTime()
+        {
+            timeElapsed++;
+            int minutes = timeElapsed / 60;
+            int seconds = timeElapsed % 60;
+            TimeLabel.Content = $"Часу минуло: {minutes:D2}:{seconds:D2}";
         }
         private void GenerateMaze()
         {
             int rows = 15;
             int cols = 25;
             maze = new int[rows, cols];
-            this.entranceRow = rows / 2;
-            this.entranceCol = 0;
-            maze[this.entranceRow, this.entranceCol] = (int)TileType.Start;
-            this.exitRow = rand.Next(1, rows - 2);
-            this.exitCol = cols - 1;
-            maze[this.exitRow, this.exitCol] = (int)TileType.End;
+            InitializeMaze(rows, cols);
+            GenerateMazeRecursive(entranceRow, entranceCol, rows, cols);
+            maze[exitRow + 1, exitCol] = (int)TileType.Path;
+            maze[entranceRow, entranceCol] = (int)TileType.Start;
+            maze[exitRow, exitCol] = (int)TileType.End;
+        }
+
+        private void InitializeMaze(int rows, int cols)
+        {
+            entranceRow = rows / 2;
+            entranceCol = 0;
+            maze[entranceRow, entranceCol] = (int)TileType.Start;
+            exitRow = rand.Next(1, rows - 2);
+            exitCol = cols - 1;
+            maze[exitRow, exitCol] = (int)TileType.End;
+
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < cols; j++)
@@ -72,53 +96,61 @@ namespace labyrinth_gamе.Views
                     maze[i, j] = (int)TileType.Wall;
                 }
             }
-            GenerateMazeRecursive(entranceRow, entranceCol, rows, cols);
-            maze[this.exitRow + 1, this.exitCol] = (int)TileType.Path;
-            maze[this.exitRow + 1, this.exitCol] = (int)TileType.Path;
-            maze[this.entranceRow, this.entranceCol] = (int)TileType.Start;
-            maze[this.exitRow, this.exitCol] = (int)TileType.End;
         }
         private void GenerateMazeRecursive(int row, int col, int totalRows, int totalCols)
         {
             maze[row, col] = (int)TileType.Path;
-            List<int> directions = new List<int> { 0, 1, 2, 3 };
-            directions = directions.OrderBy(x => rand.Next()).ToList();
+            List<int> directions = GetShuffledDirections();
             foreach (int direction in directions)
             {
-                int newRow = row;
-                int newCol = col;
-                if (direction == 0)
+                int newRow, newCol;
+                if (TryGetNewPosition(row, col, direction, out newRow, out newCol, totalRows, totalCols))
                 {
-                    newRow -= 2;
-                    if (newRow < 0)
-                        continue;
-                }
-                else if (direction == 1)
-                {
-                    newCol += 2;
-                    if (newCol >= totalCols)
-                        continue;
-                }
-                else if (direction == 2)
-                {
-                    newRow += 2;
-                    if (newRow >= totalRows)
-                        continue;
-                }
-                else if (direction == 3)
-                {
-                    newCol -= 2;
-                    if (newCol < 0)
-                        continue;
-                }
-                if (maze[newRow, newCol] == (int)TileType.Wall)
-                {
-                    maze[newRow, newCol] = (int)TileType.Path;
-                    maze[(newRow + row) / 2, (newCol + col) / 2] = (int)TileType.Path;
-
-                    GenerateMazeRecursive(newRow, newCol, totalRows, totalCols);
+                    if (maze[newRow, newCol] == (int)TileType.Wall)
+                    {
+                        CarvePath(row, col, newRow, newCol);
+                        GenerateMazeRecursive(newRow, newCol, totalRows, totalCols);
+                    }
                 }
             }
+        }
+
+        private List<int> GetShuffledDirections()
+        {
+            List<int> directions = new List<int> { 0, 1, 2, 3 };
+            return directions.OrderBy(x => rand.Next()).ToList();
+        }
+
+        private bool TryGetNewPosition(int row, int col, int direction, out int newRow, out int newCol, int totalRows, int totalCols)
+        {
+            newRow = row;
+            newCol = col;
+
+            switch (direction)
+            {
+                case 0:
+                    newRow -= 2;
+                    break;
+                case 1:
+                    newCol += 2;
+                    break;
+                case 2:
+                    newRow += 2;
+                    break;
+                case 3:
+                    newCol -= 2;
+                    break;
+                default:
+                    return false;
+            }
+
+            return newRow >= 0 && newRow < totalRows && newCol >= 0 && newCol < totalCols;
+        }
+
+        private void CarvePath(int row, int col, int newRow, int newCol)
+        {
+            maze[newRow, newCol] = (int)TileType.Path;
+            maze[(newRow + row) / 2, (newCol + col) / 2] = (int)TileType.Path;
         }
         private void DrawPlayer()
         {
@@ -132,6 +164,7 @@ namespace labyrinth_gamе.Views
             playerRect.SetValue(Canvas.TopProperty, (double)startRow * tileSize);
             canvas.Children.Add(playerRect);
         }
+
         private void DrawMaze()
         {
             for (int row = 0; row < maze.GetLength(0); row++)
@@ -180,81 +213,101 @@ namespace labyrinth_gamе.Views
 
             int newCol = (int)(newX / tileSize);
             int newRow = (int)(newY / tileSize);
-            if (newRow >= 0 && newRow < maze.GetLength(0) && newCol >= 0 && newCol < maze.GetLength(1))
+
+            if (IsMoveValid(newRow, newCol))
             {
-                if (maze[newRow, newCol] != (int)TileType.Wall)
-                {
-
-                    if (newRow == exitRow && newCol == exitCol)
-                    {
-                        playerRect.SetValue(Canvas.LeftProperty, newX);
-                        playerRect.SetValue(Canvas.TopProperty, newY);
-
-                        if (newRow == exitRow && newCol == exitCol)
-                        {
-                            timer.Stop();
-                            timeTaken = timeElapsed;
-                            CustomMessageBox messageBox = new CustomMessageBox("");
-                            Record record = new Record
-                            {
-                                UserId = User.CurrentUser.UserId,
-                                UserName = User.CurrentUser.UserName,
-                                Level = 1,
-                                Time = timeTaken + " сек"
-                            };
-                            using (var db = new DataBaseContext())
-                            {
-                                db.Records.Add(record);
-                                db.SaveChanges();
-                            }
-                            messageBox.messageBoxText.Text = $"Вітаємо, ви виграли! Витрачено часу: {timeTaken} секунд.";
-                            messageBox.ShowDialog();
-                            Close();
-                        }
-                    }
-                    else if ((Math.Abs(newRow - (int)(Canvas.GetTop(playerRect) / tileSize)) == 1 && newCol == (int)(Canvas.GetLeft(playerRect) / tileSize) && maze[newRow, newCol] != (int)TileType.Wall)
-                          || (Math.Abs(newCol - (int)(Canvas.GetLeft(playerRect) / tileSize)) == 1 && newRow == (int)(Canvas.GetTop(playerRect) / tileSize) && maze[newRow, newCol] != (int)TileType.Wall))
-                    {
-                        playerRect.SetValue(Canvas.LeftProperty, newX);
-                        playerRect.SetValue(Canvas.TopProperty, newY);
-                    }
-                }
+                UpdatePlayerPosition(newX, newY, newRow, newCol);
             }
         }
+
+        private bool IsMoveValid(int newRow, int newCol)
+        {
+            return newRow >= 0 && newRow < maze.GetLength(0) &&
+                   newCol >= 0 && newCol < maze.GetLength(1) &&
+                   maze[newRow, newCol] != (int)TileType.Wall;
+        }
+
+        private void UpdatePlayerPosition(double newX, double newY, int newRow, int newCol)
+        {
+            if (newRow == exitRow && newCol == exitCol)
+            {
+                UpdatePlayerPositionAndEndGame(newX, newY);
+            }
+            else if (IsAdjacentCell(newRow, newCol))
+            {
+                playerRect.SetValue(Canvas.LeftProperty, newX);
+                playerRect.SetValue(Canvas.TopProperty, newY);
+            }
+        }
+
+        private void UpdatePlayerPositionAndEndGame(double newX, double newY)
+        {
+            playerRect.SetValue(Canvas.LeftProperty, newX);
+            playerRect.SetValue(Canvas.TopProperty, newY);
+            StopTimerAndEndGame();
+        }
+
+        private void StopTimerAndEndGame()
+        {
+            timer.Stop();
+            timeTaken = timeElapsed;
+            SaveRecordAndShowMessage();
+            Close();
+        }
+
+        private void SaveRecordAndShowMessage()
+        {
+            CustomMessageBox messageBox = new CustomMessageBox("");
+            Record record = new Record
+            {
+                UserId = User.CurrentUser.UserId,
+                UserName = User.CurrentUser.UserName,
+                Level = 1,
+                Time = timeTaken + " сек"
+            };
+            using (var db = new DataBaseContext())
+            {
+                db.Records.Add(record);
+                db.SaveChanges();
+            }
+            messageBox.messageBoxText.Text = $"Вітаємо, ви виграли! Витрачено часу: {timeTaken} секунд.";
+            messageBox.ShowDialog();
+        }
+
+        private bool IsAdjacentCell(int newRow, int newCol)
+        {
+            return Math.Abs(newRow - (int)(Canvas.GetTop(playerRect) / tileSize)) == 1 &&
+                   newCol == (int)(Canvas.GetLeft(playerRect) / tileSize) &&
+                   maze[newRow, newCol] != (int)TileType.Wall ||
+                   Math.Abs(newCol - (int)(Canvas.GetLeft(playerRect) / tileSize)) == 1 &&
+                   newRow == (int)(Canvas.GetTop(playerRect) / tileSize) &&
+                   maze[newRow, newCol] != (int)TileType.Wall;
+        }
+
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.Key)
+            HandleMovementKeys(e.Key);
+        }
+
+        private void HandleMovementKeys(Key key)
+        {
+            switch (key)
             {
                 case Key.Left:
-                    MovePlayer(-45, 0);
-                    break;
-
-                case Key.Right:
-                    MovePlayer(45, 0);
-                    break;
-
-                case Key.Up:
-                    MovePlayer(0, -45);
-                    break;
-
-                case Key.Down:
-                    MovePlayer(0, 45);
-                    break;
-
                 case Key.A:
-                    MovePlayer(-45, 0);
+                    MovePlayer(-tileSize, 0);
                     break;
-
+                case Key.Right:
                 case Key.D:
-                    MovePlayer(45, 0);
+                    MovePlayer(tileSize, 0);
                     break;
-
+                case Key.Up:
                 case Key.W:
-                    MovePlayer(0, -45);
+                    MovePlayer(0, -tileSize);
                     break;
-
+                case Key.Down:
                 case Key.S:
-                    MovePlayer(0, 45);
+                    MovePlayer(0, tileSize);
                     break;
             }
         }
