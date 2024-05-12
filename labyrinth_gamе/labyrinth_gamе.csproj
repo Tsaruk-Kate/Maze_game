@@ -12,8 +12,12 @@
     <None Remove="level-up.png" />
     <None Remove="trophy.png" />
     <None Remove="Views\Background.jpg" />
+    <None Remove="Views\back_level1.jpg" />
     <None Remove="Views\exit.png" />
+    <None Remove="Views\home.png" />
+    <None Remove="Views\level-up.png" />
     <None Remove="Views\maze.png" />
+    <None Remove="Views\pause.png" />
     <None Remove="Views\rules.png" />
   </ItemGroup>
 
@@ -31,8 +35,12 @@
     <Resource Include="level-up.png" />
     <Resource Include="trophy.png" />
     <Resource Include="Views\Background.jpg" />
+    <Resource Include="Views\back_level1.jpg" />
     <Resource Include="Views\exit.png" />
+    <Resource Include="Views\home.png" />
+    <Resource Include="Views\level-up.png" />
     <Resource Include="Views\maze.png" />
+    <Resource Include="Views\pause.png" />
     <Resource Include="Views\rules.png" />
   </ItemGroup>
 

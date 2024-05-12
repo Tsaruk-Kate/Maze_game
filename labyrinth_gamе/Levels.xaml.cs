@@ -30,6 +30,12 @@ namespace labyrinth_gamе
         {
             NavigationService.Navigate(new Uri("/Views/Results.xaml", UriKind.Relative));
         }
-        
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Window window = Application.Current.MainWindow;
+            Level_1 windowLevel1 = new Level_1();
+            windowLevel1.Show();
+            window.Close();
+        }
     }
 }
