@@ -1,0 +1,49 @@
+﻿<Page x:Class="labyrinth_gamе.Views.Labyrinth"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:labyrinth_gamе"
+      mc:Ignorable="d" 
+                  d:DesignHeight="700" d:DesignWidth="400"
+      Title="labyrinth" MinHeight="700" MinWidth="400" MaxHeight="700" MaxWidth="400" >
+    <Page.Resources>
+
+        <Style TargetType="Button" x:Key="ButtonStyle">
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" ShadowDepth="3" BlurRadius="3" Opacity="0.5"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" CornerRadius="20" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="HotPink"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    <Page.Background>
+        <ImageBrush ImageSource="/Views/Background.jpg"/>
+    </Page.Background>
+    <Grid MinHeight="700" MinWidth="400" MaxHeight="700" MaxWidth="400">
+        <TextBlock Text="Пригоди в лабіринті" VerticalAlignment="Top" Margin="0,59,0,0" FontFamily="Segoe Print" FontSize="40" Height="145" Width="228" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+        <Image Margin="146,590,194,74" Source="/Views/rules.png"  MouseDown="Image_MouseDown" RenderTransformOrigin="0.41,0.577"/>
+        <Image Margin="139,209,139,407" Source="/Views/maze.png"/>
+        <Image Source="/Views/exit.png" Margin="212,584,152,68" MouseDown="Image_MouseDown_Exit"/>
+        <Button Content="Почати" RenderTransformOrigin="0.5,0.5" Margin="116,499,116,149" FontSize="30" FontFamily="Segoe Print" FontWeight="Medium" Foreground="#FF171111" Background="#FFF0E787" BorderBrush="Black" Click="Button_Click_2" Style="{StaticResource ButtonStyle}"/>
+        <TextBox x:Name="textBoxName" TextWrapping="Wrap" Margin="94,351,94,314" FontSize="16" FontFamily="Segoe Print" BorderBrush="#FF060606"/>
+        <Label Content="Введіть ім'я:" Margin="94,314,166,354" FontFamily="Segoe Print" RenderTransformOrigin="0.449,0.516"/>
+        <Label Content="Введіть ваш ключ:" Margin="94,391,166,277" FontFamily="Segoe Print" RenderTransformOrigin="0.449,0.516"/>
+        <TextBox x:Name="textBoxKey" TextWrapping="Wrap" Margin="94,428,94,237" FontSize="16" FontFamily="Segoe Print" BorderBrush="Black"/>
+    </Grid>
+</Page>
