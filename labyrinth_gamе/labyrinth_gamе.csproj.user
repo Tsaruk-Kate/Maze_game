@@ -7,11 +7,17 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Levels.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Labyrinth.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Levels.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\Labyrinth.xaml">
       <SubType>Designer</SubType>
     </Page>

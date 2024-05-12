@@ -85,7 +85,7 @@ namespace labyrinth_gamе.Views
                     if (existingUser.Key == enteredKey)
                     {
                         User.CurrentUser = existingUser;
-                        NavigationService.Navigate(new Labyrinth(new UserFactory()));
+                        NavigationService.Navigate(new Levels());
                     }
                     else
                     {
@@ -99,7 +99,7 @@ namespace labyrinth_gamе.Views
                     db.Users.Add(newUser);
                     db.SaveChanges();
                     User.CurrentUser = newUser;
-                    NavigationService.Navigate(new Labyrinth(new UserFactory()));
+                    NavigationService.Navigate(new Levels());
                 }
             }
         }
