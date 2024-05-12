@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:labyrinth_gamе.Views"
         mc:Ignorable="d"
-                        Title="" Height="400" Width="800"  WindowStyle="None"  Background="Transparent" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+                Title="" Height="400" Width="800"  WindowStyle="None"  Background="Transparent" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+    </Window.Resources>
     <Grid>
         <Border BorderBrush="DarkGreen" BorderThickness="5" CornerRadius="40" >
             <Border.Background>
@@ -33,7 +35,7 @@
                     <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock x:Name="messageBoxText" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding Message}" FontSize="24" Background="LightGoldenrodYellow" FontFamily="Segoe Print" Margin="0,10,0,10" />
-                <Button  Grid.Row="3" Grid.Column="1" Width="80" Height="50" Background="{x:Null}" BorderBrush="{x:Null}">
+                <Button  Grid.Row="3" Grid.Column="1" Width="80" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Click="Button_Rules">
                     <Image Source="/Views/rules.png" Width="40"/>
                 </Button>
                 <Button Grid.Row="3" Grid.Column="3" Width="80" Height="60" Background="{x:Null}" BorderBrush="{x:Null}" Click="Button_Levels">
@@ -42,7 +44,7 @@
                 <Button Grid.Row="4" Grid.Column="2" Width="80" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Click="Button_Home" HorizontalContentAlignment="Center" HorizontalAlignment="Left">
                     <Image Source="/Views/home.png" Width="40"/>
                 </Button>
-                <Button Grid.Row="3" Grid.Column="2" Width="80" Height="50" Background="{x:Null}" BorderBrush="{x:Null}"  HorizontalAlignment="Center" VerticalAlignment="Center" >
+                <Button Grid.Row="3" Grid.Column="2" Width="80" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Click="Button_Results" HorizontalAlignment="Center" VerticalAlignment="Center" >
                     <Image Source="/Views/trophy.png" Width="40"/>
                 </Button>
                 <Button Grid.Row="4" Grid.Column="2" Width="52" Height="50" Background="{x:Null}" BorderBrush="{x:Null}" Click="Button_Exit" HorizontalAlignment="Right" HorizontalContentAlignment="Center">
