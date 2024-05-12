@@ -44,6 +44,6 @@
         <Image Source="/Views/level-up.png" Margin="158,128,158,529" RenderTransformOrigin="0.733,0.163"/>
         <Button Content="Легкий" RenderTransformOrigin="0.5,0.5" Margin="61,253,61,395" FontSize="30" FontFamily="Segoe Print" FontWeight="Medium" Foreground="#FF171111" Background="#FFF0E787" BorderBrush="Black" Style="{StaticResource ButtonStyle}" Click="Button_Click"/>
         <Button Content="Середній" RenderTransformOrigin="0.5,0.5" Margin="61,350,61,298" FontSize="30" FontFamily="Segoe Print" FontWeight="Medium" Foreground="#FF171111" Background="#FFF0E787" BorderBrush="Black" Style="{StaticResource ButtonStyle}" Click="Button_Click_4"/>
-        <Button Content="Важкий" RenderTransformOrigin="0.5,0.5" Margin="61,449,61,199" FontSize="30" FontFamily="Segoe Print" FontWeight="Medium" Foreground="#FF171111" Background="#FFF0E787" BorderBrush="Black" Style="{StaticResource ButtonStyle}" />
+        <Button Content="Важкий" RenderTransformOrigin="0.5,0.5" Margin="61,449,61,199" FontSize="30" FontFamily="Segoe Print" FontWeight="Medium" Foreground="#FF171111" Background="#FFF0E787" BorderBrush="Black" Style="{StaticResource ButtonStyle}" Click="Button_Click_5"/>
     </Grid>
 </Page>

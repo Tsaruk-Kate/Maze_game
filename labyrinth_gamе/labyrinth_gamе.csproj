@@ -12,6 +12,7 @@
     <None Remove="Views\Background.jpg" />
     <None Remove="Views\back_level1.jpg" />
     <None Remove="Views\back_level2.jpg" />
+    <None Remove="Views\back_level3.jpg" />
     <None Remove="Views\exit.png" />
     <None Remove="Views\home.png" />
     <None Remove="Views\level-up.png" />
@@ -35,6 +36,7 @@
     <Resource Include="Views\Background.jpg" />
     <Resource Include="Views\back_level1.jpg" />
     <Resource Include="Views\back_level2.jpg" />
+    <Resource Include="Views\back_level3.jpg" />
     <Resource Include="Views\exit.png" />
     <Resource Include="Views\home.png" />
     <Resource Include="Views\level-up.png" />
