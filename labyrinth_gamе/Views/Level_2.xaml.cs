@@ -262,6 +262,25 @@ namespace labyrinth_gamе.Views
             state = new PlayingState(this);
             timer.Start();
         }
+        private void RestartGame()
+        {
+            double x = entranceCol * tileSize;
+            double y = entranceRow * tileSize;
+            playerRect.SetValue(Canvas.LeftProperty, x);
+            playerRect.SetValue(Canvas.TopProperty, y);
+            GenerateMaze();
+            DrawMaze();
+            DrawPlayer();
+            {
+                timeElapsed = 0;
+                timeTaken = 0;
+                timer.Start();
+            }
+        }
+        private void Image_MouseDown_15(object sender, MouseButtonEventArgs e)
+        {
+            RestartGame();
+        }
         private void Image_MouseDown_8(object sender, RoutedEventArgs e)
         {
             // Створення екземпляру фабрики користувачів

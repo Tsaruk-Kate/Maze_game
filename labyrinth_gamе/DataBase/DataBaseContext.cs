@@ -11,7 +11,7 @@ namespace labyrinth_gamе.DataBase
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite
-                (@"DataSource=C:\ЖДТУ\2 курс\2 семестр\Конструювання ПЗ\Maze_game\labyrinth_gamе\DataBase\Records.db");
+                (@"DataSource=C:\Users\Acer\Desktop\2 курс\2 семестр\pull requests\Maze_game\labyrinth_gamе\DataBase\Records.db");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

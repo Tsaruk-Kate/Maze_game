@@ -20,6 +20,7 @@
     <None Remove="Views\level-up.png" />
     <None Remove="Views\maze.png" />
     <None Remove="Views\pause.png" />
+    <None Remove="Views\restart.png" />
     <None Remove="Views\rules.png" />
     <None Remove="Views\trophy.png" />
   </ItemGroup>
@@ -46,6 +47,7 @@
     <Resource Include="Views\level-up.png" />
     <Resource Include="Views\maze.png" />
     <Resource Include="Views\pause.png" />
+    <Resource Include="Views\restart.png" />
     <Resource Include="Views\rules.png" />
     <Resource Include="Views\trophy.png" />
   </ItemGroup>

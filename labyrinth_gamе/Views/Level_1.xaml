@@ -12,6 +12,7 @@
         <ImageBrush ImageSource="/Views/back_level1.jpg" />
     </Window.Background>
     <Grid Name="MazeGrid"  Margin="10,0,0,0" RenderTransformOrigin="0.502,0.509">
+        <Image Source="/Views/restart.png" Margin="0,41,43,0" RenderTransformOrigin="0.733,0.163" MinHeight="50" MinWidth="80" MaxHeight="50" MaxWidth="80" VerticalAlignment="Top" HorizontalAlignment="Right" MouseDown="Image_MouseDown_13"/>
         <Image Source="/Views/pause.png" Margin="37,41,0,0" RenderTransformOrigin="0.733,0.163" MinHeight="50" MinWidth="80" MaxHeight="50" MaxWidth="80" VerticalAlignment="Top" HorizontalAlignment="Left" MouseDown="Image_MouseDown_14"/>
         <Image Margin="37,0,0,62" Source="/Views/home.png" MinHeight="50" MinWidth="80" MaxHeight="50" MaxWidth="80"  MouseDown="Image_MouseDown_7" VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
         <Image Margin="0,0,43,62" Source="/Views/level-up.png" MinHeight="50" MinWidth="80" MaxHeight="50" MaxWidth="80" MouseDown="Image_MouseDown_10" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
