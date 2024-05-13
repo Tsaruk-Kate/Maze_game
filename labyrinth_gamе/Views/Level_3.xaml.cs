@@ -343,7 +343,26 @@ namespace labyrinth_gamе.Views
             isPaused = false;
             timer.Start();
         }
-
+        private void RestartGame()
+        {
+            double x = mazeGenerator.EntranceCol * tileSize;
+            double y = mazeGenerator.EntranceRow * tileSize;
+            playerRect.SetValue(Canvas.LeftProperty, x);
+            playerRect.SetValue(Canvas.TopProperty, y);
+            mazeGenerator = new MazeGenerator(19, 39);
+            mazeRenderer = new MazeRenderer(canvas_1, mazeGenerator.Maze, tileSize);
+            mazeRenderer.DrawMaze();
+            DrawPlayer();
+            {
+                timeElapsed = 0;
+                timeTaken = 0;
+                timer.Start();
+            }
+        }
+        private void Image_MouseDown_17(object sender, MouseButtonEventArgs e)
+        {
+            RestartGame();
+        }
         private void Image_MouseDown_9(object sender, RoutedEventArgs e)
         {
             IUserFactory userFactory = new UserFactory();
