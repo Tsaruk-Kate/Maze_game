@@ -54,7 +54,7 @@ _Refactoring Techniques_
 
 Composing Methods:
 
-[This code](https://github.com/Tsaruk-Kate/Maze_game/blob/7518ad18c6c1a0a706e1dd12bb39e422b5247dcf/labyrinth_gam%D0%B5/Views/Level_1.xaml.cs) has been refactored using the Composing Methods technique, which consists of splitting functions into smaller code blocks. Here are the main changes:
+[This code](https://github.com/Tsaruk-Kate/Maze_game/pull/5) has been refactored using the Composing Methods technique, which consists of splitting functions into smaller code blocks. Here are the main changes:
 InitializeWindow() and InitializeTimer() methods: Separate methods have been created to initialize the window and timer. This allows for better code organization and makes the main method easier to understand.
 UpdateElapsedTime() method: This method is only responsible for updating the elapsed time display and is called in Timer_Tick. This improves the readability and comprehension of the code.
 InitializeMaze() method: A separate method has been created to initialize the maze. This includes placing the entry and exit points, as well as creating walls.
@@ -64,7 +64,7 @@ These changes make the code more structured, understandable, and maintainable, a
 
 Simplifying Conditional Expressions:
 
-[The code](https://github.com/Tsaruk-Kate/Maze_game/blob/7518ad18c6c1a0a706e1dd12bb39e422b5247dcf/labyrinth_gam%D0%B5/Views/Level_2.xaml.cs) was refactored using the Simplifying Conditional Expressions technique, which simplifies conditional expressions and makes them more understandable and compact. Here are some of the changes that have been made:
+[The code](https://github.com/Tsaruk-Kate/Maze_game/pull/6) was refactored using the Simplifying Conditional Expressions technique, which simplifies conditional expressions and makes them more understandable and compact. Here are some of the changes that have been made:
 A new IsPaused() method has been introduced to check if the game is currently paused.
 The Timer_Tick method uses the IsPaused() method to determine whether the game's downtime should be taken into account.
 In the MovePlayer method, new auxiliary methods CheckExitCollision and CheckMovementValidity have been introduced to check the conditions for exit collisions or the possibility of movement in the game.
@@ -74,7 +74,7 @@ These changes help make the code more understandable and maintainable.
 
 Moving Features between Objects:
 
-[The code](https://github.com/Tsaruk-Kate/Maze_game/blob/7518ad18c6c1a0a706e1dd12bb39e422b5247dcf/labyrinth_gam%D0%B5/Views/Level_3.xaml.cs) refactoring used the Moving Features between Objects technique, which consists in moving features and functionality between classes to improve the structure and understanding of the code. Here are some of the changes that have been made:
+[The code](https://github.com/Tsaruk-Kate/Maze_game/pull/7) refactoring used the Moving Features between Objects technique, which consists in moving features and functionality between classes to improve the structure and understanding of the code. Here are some of the changes that have been made:
 The maze generator and visualizer have been moved to separate classes:
 Previously, the functionality for generating the maze and visualizing it was located directly in the Level_3 class. In the refactoring, this functionality was moved to separate classes MazeGenerator and MazeRenderer.
 This allowed us to reduce the dependency between classes, make them more independent and understandable.
