@@ -50,6 +50,7 @@
     <Resource Include="Views\restart.png" />
     <Resource Include="Views\rules.png" />
     <Resource Include="Views\trophy.png" />
+    <Resource Include="Views\diamond.png" />
   </ItemGroup>
 
 </Project>

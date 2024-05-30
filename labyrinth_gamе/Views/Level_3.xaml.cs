@@ -210,7 +210,8 @@ namespace labyrinth_gamе.Views
                     Image diamondImage = new Image();
                     diamondImage.Width = tileSize;
                     diamondImage.Height = tileSize;
-                    diamondImage.Source = new BitmapImage(new Uri(@"C:\Users\Admin\Desktop\Added the ability to collect diamonds\labyrinth_gamе\Views\diamond.png"));
+                    var uri = new Uri("pack://application:,,,/Views/diamond.png", UriKind.Absolute);
+                    diamondImage.Source = new BitmapImage(uri);
 
                     Canvas.SetLeft(diamondImage, diamond.Col * tileSize);
                     Canvas.SetTop(diamondImage, diamond.Row * tileSize);
