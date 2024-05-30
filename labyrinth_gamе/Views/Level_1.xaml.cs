@@ -17,7 +17,14 @@ using System.Windows.Threading;
 
 namespace labyrinth_gamе.Views
 {
-    public enum TileType { Wall, Path, Start, End }
+    public enum TileType
+    {
+        Wall,
+        Path,
+        Start,
+        End
+    }
+
     public partial class Level_1 : Window
     {
         private int[,] maze;
@@ -31,15 +38,22 @@ namespace labyrinth_gamе.Views
         private int timeElapsed;
         private DispatcherTimer timer;
         private int timeTaken;
+
         public Level_1()
         {
             InitializeComponent();
             InitializeWindow();
+            InitializeGame();
+        }
+
+        private void InitializeGame()
+        {
             GenerateMaze();
             DrawMaze();
             DrawPlayer();
             InitializeTimer();
         }
+
         private void InitializeWindow()
         {
             this.WindowState = WindowState.Maximized;
@@ -47,8 +61,10 @@ namespace labyrinth_gamе.Views
 
         private void InitializeTimer()
         {
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
+            timer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(1)
+            };
             timer.Tick += Timer_Tick;
             timer.Start();
         }
@@ -68,6 +84,7 @@ namespace labyrinth_gamе.Views
             int seconds = timeElapsed % 60;
             TimeLabel.Content = $"Часу минуло: {minutes:D2}:{seconds:D2}";
         }
+
         private void GenerateMaze()
         {
             int rows = 15;
@@ -97,6 +114,7 @@ namespace labyrinth_gamе.Views
                 }
             }
         }
+
         private void GenerateMazeRecursive(int row, int col, int totalRows, int totalCols)
         {
             maze[row, col] = (int)TileType.Path;
@@ -121,7 +139,8 @@ namespace labyrinth_gamе.Views
             return directions.OrderBy(x => rand.Next()).ToList();
         }
 
-        private bool TryGetNewPosition(int row, int col, int direction, out int newRow, out int newCol, int totalRows, int totalCols)
+        private bool TryGetNewPosition(int row, int col, int direction, out int newRow, out int newCol, int totalRows,
+            int totalCols)
         {
             newRow = row;
             newCol = col;
@@ -152,17 +171,25 @@ namespace labyrinth_gamе.Views
             maze[newRow, newCol] = (int)TileType.Path;
             maze[(newRow + row) / 2, (newCol + col) / 2] = (int)TileType.Path;
         }
+
         private void DrawPlayer()
         {
-            playerRect = new Rectangle();
-            playerRect.Width = tileSize;
-            playerRect.Height = tileSize;
-            playerRect.Fill = Brushes.GreenYellow;
+            playerRect = new Rectangle()
+            {
+                Width = tileSize,
+                Height = tileSize,
+                Fill = Brushes.GreenYellow
+            };
             int startRow = maze.GetLength(0) / 2;
             int startCol = 0;
-            playerRect.SetValue(Canvas.LeftProperty, (double)startCol * tileSize);
-            playerRect.SetValue(Canvas.TopProperty, (double)startRow * tileSize);
+            SetPlayerRect((double)startCol * tileSize, (double)startRow * tileSize);
             canvas.Children.Add(playerRect);
+        }
+
+        private void SetPlayerRect(double xCoordinate, double yCoordinate)
+        {
+            playerRect.SetValue(Canvas.LeftProperty, xCoordinate);
+            playerRect.SetValue(Canvas.TopProperty, yCoordinate);
         }
 
         private void DrawMaze()
@@ -196,16 +223,19 @@ namespace labyrinth_gamе.Views
                         default:
                             break;
                     }
+
                     if ((TileType)maze[row, col] == TileType.Start)
                     {
                         entranceRow = row;
                         entranceCol = col;
                         rect.Fill = Brushes.LightBlue;
                     }
+
                     canvas.Children.Add(rect);
                 }
             }
         }
+
         private void MovePlayer(int deltaX, int deltaY)
         {
             double newX = Canvas.GetLeft(playerRect) + deltaX;
@@ -235,15 +265,13 @@ namespace labyrinth_gamе.Views
             }
             else if (IsAdjacentCell(newRow, newCol))
             {
-                playerRect.SetValue(Canvas.LeftProperty, newX);
-                playerRect.SetValue(Canvas.TopProperty, newY);
+                SetPlayerRect(newX, newY);
             }
         }
 
         private void UpdatePlayerPositionAndEndGame(double newX, double newY)
         {
-            playerRect.SetValue(Canvas.LeftProperty, newX);
-            playerRect.SetValue(Canvas.TopProperty, newY);
+            SetPlayerRect(newX, newY);
             StopTimerAndEndGame();
         }
 
@@ -270,6 +298,7 @@ namespace labyrinth_gamе.Views
                 db.Records.Add(record);
                 db.SaveChanges();
             }
+
             messageBox.messageBoxText.Text = $"Вітаємо, ви виграли! Витрачено часу: {timeTaken} секунд.";
             messageBox.ShowDialog();
         }
@@ -311,11 +340,14 @@ namespace labyrinth_gamе.Views
                     break;
             }
         }
+
         private bool isPaused = false;
+
         private void Image_MouseDown_14(object sender, MouseButtonEventArgs e)
         {
             PauseGame();
         }
+
         private void PauseGame()
         {
             isPaused = true;
@@ -323,14 +355,11 @@ namespace labyrinth_gamе.Views
             MessageBox.Show("Гра призупинена. Натисніть ОК, щоб продовжити гру.");
             isPaused = false;
             timer.Start();
-
         }
+
         private void RestartGame()
         {
-            double x = entranceCol * tileSize;
-            double y = entranceRow * tileSize;
-            playerRect.SetValue(Canvas.LeftProperty, x);
-            playerRect.SetValue(Canvas.TopProperty, y);
+            SetPlayerRect(entranceCol * tileSize, entranceRow * tileSize);
             GenerateMaze();
             DrawMaze();
             DrawPlayer();
@@ -340,6 +369,7 @@ namespace labyrinth_gamе.Views
                 timer.Start();
             }
         }
+
         private void Image_MouseDown_13(object sender, MouseButtonEventArgs e)
         {
             RestartGame();
@@ -347,22 +377,22 @@ namespace labyrinth_gamе.Views
 
         private void Image_MouseDown_10(object sender, MouseButtonEventArgs e)
         {
-            Frame frame = new Frame();
-            Window mainWindow = new MainWindow();
-            frame.Navigate(new Levels());
-            mainWindow.Content = frame;
-            mainWindow.Show();
-            this.Close();
-
+            NavigateToPage(new Levels());
         }
+
         private void Image_MouseDown_7(object sender, RoutedEventArgs e)
         {
             // Створення екземпляру фабрики користувачів
             IUserFactory userFactory = new UserFactory();
+            // Передача фабрики користувачів у конструктор Labyrinth
+            NavigateToPage(new Labyrinth(userFactory));
+        }
+
+        private void NavigateToPage(Page page)
+        {
             Frame frame = new Frame();
             Window mainWindow = new MainWindow();
-            // Передача фабрики користувачів у конструктор Labyrinth
-            frame.Navigate(new Labyrinth(new UserFactory()));
+            frame.Navigate(page);
             mainWindow.Content = frame;
             mainWindow.Show();
             this.Close();
