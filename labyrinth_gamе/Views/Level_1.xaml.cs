@@ -17,13 +17,6 @@ using System.Windows.Threading;
 
 namespace labyrinth_gamе.Views
 {
-    public enum TileType
-    {
-        Wall,
-        Path,
-        Start,
-        End
-    }
 
     public partial class Level_1 : Window
     {

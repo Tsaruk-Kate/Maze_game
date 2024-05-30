@@ -18,7 +18,6 @@ using System.Windows.Threading;
 
 namespace labyrinth_gamе.Views
 {
-    public enum TileType2 { Wall, Path, Start, End }
     public partial class Level_2 : Window
     {
         private int[,] maze;
@@ -72,25 +71,25 @@ namespace labyrinth_gamе.Views
             maze = new int[rows, cols];
             entranceRow = rows / 2;
             entranceCol = 0;
-            maze[entranceRow, entranceCol] = (int)TileType2.Start;
+            maze[entranceRow, entranceCol] = (int)TileType.Start;
             exitRow = rand.Next(1, rows - 2);
             exitCol = cols - 1;
-            maze[exitRow, exitCol] = (int)TileType2.End;
+            maze[exitRow, exitCol] = (int)TileType.End;
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < cols; j++)
                 {
-                    maze[i, j] = (int)TileType2.Wall;
+                    maze[i, j] = (int)TileType.Wall;
                 }
             }
             GenerateMazeRecursive(entranceRow, entranceCol, rows, cols);
-            maze[exitRow + 1, exitCol] = (int)TileType2.Path;
-            maze[entranceRow, entranceCol] = (int)TileType2.Start;
-            maze[exitRow, exitCol] = (int)TileType2.End;
+            maze[exitRow + 1, exitCol] = (int)TileType.Path;
+            maze[entranceRow, entranceCol] = (int)TileType.Start;
+            maze[exitRow, exitCol] = (int)TileType.End;
         }
         private void GenerateMazeRecursive(int row, int col, int totalRows, int totalCols)
         {
-            maze[row, col] = (int)TileType2.Path;
+            maze[row, col] = (int)TileType.Path;
             List<int> directions = new List<int> { 0, 1, 2, 3 };
             directions = directions.OrderBy(x => rand.Next()).ToList();
 
@@ -123,10 +122,10 @@ namespace labyrinth_gamе.Views
                     if (newCol < 0)
                         continue;
                 }
-                if (maze[newRow, newCol] == (int)TileType2.Wall)
+                if (maze[newRow, newCol] == (int)TileType.Wall)
                 {
-                    maze[newRow, newCol] = (int)TileType2.Path;
-                    maze[(newRow + row) / 2, (newCol + col) / 2] = (int)TileType2.Path;
+                    maze[newRow, newCol] = (int)TileType.Path;
+                    maze[(newRow + row) / 2, (newCol + col) / 2] = (int)TileType.Path;
 
                     GenerateMazeRecursive(newRow, newCol, totalRows, totalCols);
                 }
@@ -156,18 +155,18 @@ namespace labyrinth_gamе.Views
                     rect.SetValue(Canvas.LeftProperty, (double)col * tileSize);
                     rect.SetValue(Canvas.TopProperty, (double)row * tileSize);
 
-                    switch ((TileType2)maze[row, col])
+                    switch ((TileType)maze[row, col])
                     {
-                        case TileType2.Wall:
+                        case TileType.Wall:
                             rect.Fill = Brushes.DarkBlue;
                             break;
-                        case TileType2.Path:
+                        case TileType.Path:
                             rect.Fill = Brushes.AliceBlue;
                             break;
-                        case TileType2.Start:
+                        case TileType.Start:
                             rect.Fill = Brushes.LightSkyBlue;
                             break;
-                        case TileType2.End:
+                        case TileType.End:
                             rect.Fill = Brushes.MediumSlateBlue;
                             exitRow = row;
                             exitCol = col;
@@ -175,7 +174,7 @@ namespace labyrinth_gamе.Views
                         default:
                             break;
                     }
-                    if ((TileType2)maze[row, col] == TileType2.Start)
+                    if ((TileType)maze[row, col] == TileType.Start)
                     {
                         entranceRow = row;
                         entranceCol = col;
@@ -193,7 +192,7 @@ namespace labyrinth_gamе.Views
             int newRow = (int)(newY / tileSize);
             if (newRow >= 0 && newRow < maze.GetLength(0) && newCol >= 0 && newCol < maze.GetLength(1))
             {
-                if (maze[newRow, newCol] != (int)TileType2.Wall)
+                if (maze[newRow, newCol] != (int)TileType.Wall)
                 {
                     if (CheckExitCollision(newRow, newCol))
                     {

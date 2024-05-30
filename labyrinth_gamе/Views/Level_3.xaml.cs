@@ -19,7 +19,6 @@ namespace labyrinth_gamе.Views
 {
     public partial class Level_3 : Window
     {
-        public enum TileType2 { Wall, Path, Start, End, Diamond }
         private int[,] maze;
         private Rectangle playerRect;
         private readonly int tileSize = 32;
@@ -74,39 +73,39 @@ namespace labyrinth_gamе.Views
             maze = new int[rows, cols];
             this.entranceRow = rows / 2;
             this.entranceCol = 0;
-            maze[this.entranceRow, this.entranceCol] = (int)TileType2.Start;
+            maze[this.entranceRow, this.entranceCol] = (int)TileType.Start;
             this.exitRow = rand.Next(1, rows - 2);
             this.exitCol = cols - 1;
-            maze[this.exitRow, this.exitCol] = (int)TileType2.End;
+            maze[this.exitRow, this.exitCol] = (int)TileType.End;
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < cols; j++)
                 {
-                    maze[i, j] = (int)TileType2.Wall;
+                    maze[i, j] = (int)TileType.Wall;
                 }
             }
             GenerateMazeRecursive(entranceRow, entranceCol, rows, cols);
-            maze[this.exitRow + 1, this.exitCol] = (int)TileType2.Path;
+            maze[this.exitRow + 1, this.exitCol] = (int)TileType.Path;
             diamonds = new List<Diamond>();
             int diamondCount = 0;
             while (diamondCount < 10)
             {
                 int randRow = rand.Next(1, rows - 1);
                 int randCol = rand.Next(1, cols - 1);
-                if (maze[randRow, randCol] == (int)TileType2.Path &&
+                if (maze[randRow, randCol] == (int)TileType.Path &&
                     diamonds.Find(d => d.Row == randRow && d.Col == randCol) == null)
                 {
                     diamonds.Add(new Diamond { Row = randRow, Col = randCol });
                     diamondCount++;
                 }
             }
-            maze[this.exitRow + 1, this.exitCol] = (int)TileType2.Path;
-            maze[this.entranceRow, this.entranceCol] = (int)TileType2.Start;
-            maze[this.exitRow, this.exitCol] = (int)TileType2.End;
+            maze[this.exitRow + 1, this.exitCol] = (int)TileType.Path;
+            maze[this.entranceRow, this.entranceCol] = (int)TileType.Start;
+            maze[this.exitRow, this.exitCol] = (int)TileType.End;
         }
         private void GenerateMazeRecursive(int row, int col, int totalRows, int totalCols)
         {
-            maze[row, col] = (int)TileType2.Path;
+            maze[row, col] = (int)TileType.Path;
 
             List<int> directions = new List<int> { 0, 1, 2, 3 };
             directions = directions.OrderBy(x => rand.Next()).ToList();
@@ -140,10 +139,10 @@ namespace labyrinth_gamе.Views
                     if (newCol < 0)
                         continue;
                 }
-                if (maze[newRow, newCol] == (int)TileType2.Wall)
+                if (maze[newRow, newCol] == (int)TileType.Wall)
                 {
-                    maze[newRow, newCol] = (int)TileType2.Path;
-                    maze[(newRow + row) / 2, (newCol + col) / 2] = (int)TileType2.Path;
+                    maze[newRow, newCol] = (int)TileType.Path;
+                    maze[(newRow + row) / 2, (newCol + col) / 2] = (int)TileType.Path;
 
                     GenerateMazeRecursive(newRow, newCol, totalRows, totalCols);
                 }
@@ -175,18 +174,18 @@ namespace labyrinth_gamе.Views
                     rect.SetValue(Canvas.LeftProperty, (double)col * tileSize);
                     rect.SetValue(Canvas.TopProperty, (double)row * tileSize);
 
-                    switch ((TileType2)maze[row, col])
+                    switch ((TileType)maze[row, col])
                     {
-                        case TileType2.Wall:
+                        case TileType.Wall:
                             rect.Fill = Brushes.DarkMagenta;
                             break;
-                        case TileType2.Path:
+                        case TileType.Path:
                             rect.Fill = Brushes.Plum;
                             break;
-                        case TileType2.Start:
+                        case TileType.Start:
                             rect.Fill = Brushes.MediumPurple;
                             break;
-                        case TileType2.End:
+                        case TileType.End:
                             rect.Fill = Brushes.MediumVioletRed;
                             exitRow = row;
                             exitCol = col;
@@ -194,7 +193,7 @@ namespace labyrinth_gamе.Views
                         default:
                             break;
                     }
-                    if ((TileType2)maze[row, col] == TileType2.Start)
+                    if ((TileType)maze[row, col] == TileType.Start)
                     {
                         entranceRow = row;
                         entranceCol = col;
@@ -230,10 +229,10 @@ namespace labyrinth_gamе.Views
             int newRow = (int)(newY / tileSize);
             if (newRow >= 0 && newRow < maze.GetLength(0) && newCol >= 0 && newCol < maze.GetLength(1))
             {
-                if (maze[newRow, newCol] != (int)TileType2.Wall)
+                if (maze[newRow, newCol] != (int)TileType.Wall)
                 {
-                    if ((Math.Abs(newRow - (int)(Canvas.GetTop(playerRect) / tileSize)) == 1 && newCol == (int)(Canvas.GetLeft(playerRect) / tileSize) && maze[newRow, newCol] != (int)TileType.Wall)
-                        || (Math.Abs(newCol - (int)(Canvas.GetLeft(playerRect) / tileSize)) == 1 && newRow == (int)(Canvas.GetTop(playerRect) / tileSize) && maze[newRow, newCol] != (int)TileType.Wall))
+                    if ((Math.Abs(newRow - (int)(Canvas.GetTop(playerRect) / tileSize)) == 1 && newCol == (int)(Canvas.GetLeft(playerRect) / tileSize) && maze[newRow, newCol] != (int)Views.TileType.Wall)
+                        || (Math.Abs(newCol - (int)(Canvas.GetLeft(playerRect) / tileSize)) == 1 && newRow == (int)(Canvas.GetTop(playerRect) / tileSize) && maze[newRow, newCol] != (int)Views.TileType.Wall))
                     {
                         playerRect.SetValue(Canvas.LeftProperty, newX);
                         playerRect.SetValue(Canvas.TopProperty, newY);
@@ -242,7 +241,7 @@ namespace labyrinth_gamе.Views
                         {
                             if (newRow == diamond.Row && newCol == diamond.Col)
                             {
-                                maze[diamond.Row, diamond.Col] = (int)TileType2.Path;
+                                maze[diamond.Row, diamond.Col] = (int)TileType.Path;
                                 diamonds.Remove(diamond);
                                 collectedDiamonds++;
                                 diamondsTextBlock.Text = "Діаманти: " + collectedDiamonds;
