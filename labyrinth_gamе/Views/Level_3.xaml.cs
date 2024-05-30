@@ -19,23 +19,17 @@ namespace labyrinth_gamе.Views
 {
     public partial class Level_3 : Window
     {
-        private int[,] maze;
-        private Rectangle playerRect;
-        private readonly int tileSize = 32;
-        private Random rand = new Random();
-        private int exitRow;
-        private int exitCol;
-        private int entranceRow;
-        private int entranceCol;
-        private int timeElapsed;
-        private DispatcherTimer timer;
-        private int timeTaken;
+        private LevelBase _levelBase;
         private Dictionary<Key, ICommand> _commands;
         private List<Diamond> diamonds;
         private int collectedDiamonds = 0;
 
         public Level_3()
         {
+            _levelBase = new LevelBase()
+            {
+                tileSize = 32
+            };
             InitializeComponent();
             _commands = new Dictionary<Key, ICommand>
             {
@@ -51,64 +45,69 @@ namespace labyrinth_gamе.Views
             GenerateMaze();
             DrawMaze();
             DrawPlayer();
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += Timer_Tick;
-            timer.Start();
+            _levelBase.timer = new DispatcherTimer();
+            _levelBase.timer.Interval = TimeSpan.FromSeconds(1);
+            _levelBase.timer.Tick += Timer_Tick;
+            _levelBase.timer.Start();
         }
+
         private void Timer_Tick(object sender, EventArgs e)
         {
             if (!isPaused)
             {
-                timeElapsed++;
-                int minutes = timeElapsed / 60;
-                int seconds = timeElapsed % 60;
+                _levelBase.timeElapsed++;
+                int minutes = _levelBase.timeElapsed / 60;
+                int seconds = _levelBase.timeElapsed % 60;
                 TimeLabel.Content = $"Часу минуло: {minutes:D2}:{seconds:D2}";
             }
         }
+
         private void GenerateMaze()
         {
             int rows = 19;
             int cols = 39;
-            maze = new int[rows, cols];
-            this.entranceRow = rows / 2;
-            this.entranceCol = 0;
-            maze[this.entranceRow, this.entranceCol] = (int)TileType.Start;
-            this.exitRow = rand.Next(1, rows - 2);
-            this.exitCol = cols - 1;
-            maze[this.exitRow, this.exitCol] = (int)TileType.End;
+            _levelBase.maze = new int[rows, cols];
+            this._levelBase.entranceRow = rows / 2;
+            this._levelBase.entranceCol = 0;
+            _levelBase.maze[this._levelBase.entranceRow, this._levelBase.entranceCol] = (int)TileType.Start;
+            this._levelBase.exitRow = _levelBase.rand.Next(1, rows - 2);
+            this._levelBase.exitCol = cols - 1;
+            _levelBase.maze[this._levelBase.exitRow, this._levelBase.exitCol] = (int)TileType.End;
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < cols; j++)
                 {
-                    maze[i, j] = (int)TileType.Wall;
+                    _levelBase.maze[i, j] = (int)TileType.Wall;
                 }
             }
-            GenerateMazeRecursive(entranceRow, entranceCol, rows, cols);
-            maze[this.exitRow + 1, this.exitCol] = (int)TileType.Path;
+
+            GenerateMazeRecursive(_levelBase.entranceRow, _levelBase.entranceCol, rows, cols);
+            _levelBase.maze[this._levelBase.exitRow + 1, this._levelBase.exitCol] = (int)TileType.Path;
             diamonds = new List<Diamond>();
             int diamondCount = 0;
             while (diamondCount < 10)
             {
-                int randRow = rand.Next(1, rows - 1);
-                int randCol = rand.Next(1, cols - 1);
-                if (maze[randRow, randCol] == (int)TileType.Path &&
+                int randRow = _levelBase.rand.Next(1, rows - 1);
+                int randCol = _levelBase.rand.Next(1, cols - 1);
+                if (_levelBase.maze[randRow, randCol] == (int)TileType.Path &&
                     diamonds.Find(d => d.Row == randRow && d.Col == randCol) == null)
                 {
                     diamonds.Add(new Diamond { Row = randRow, Col = randCol });
                     diamondCount++;
                 }
             }
-            maze[this.exitRow + 1, this.exitCol] = (int)TileType.Path;
-            maze[this.entranceRow, this.entranceCol] = (int)TileType.Start;
-            maze[this.exitRow, this.exitCol] = (int)TileType.End;
+
+            _levelBase.maze[this._levelBase.exitRow + 1, this._levelBase.exitCol] = (int)TileType.Path;
+            _levelBase.maze[this._levelBase.entranceRow, this._levelBase.entranceCol] = (int)TileType.Start;
+            _levelBase.maze[this._levelBase.exitRow, this._levelBase.exitCol] = (int)TileType.End;
         }
+
         private void GenerateMazeRecursive(int row, int col, int totalRows, int totalCols)
         {
-            maze[row, col] = (int)TileType.Path;
+            _levelBase.maze[row, col] = (int)TileType.Path;
 
             List<int> directions = new List<int> { 0, 1, 2, 3 };
-            directions = directions.OrderBy(x => rand.Next()).ToList();
+            directions = directions.OrderBy(x => _levelBase.rand.Next()).ToList();
 
             foreach (int direction in directions)
             {
@@ -139,42 +138,47 @@ namespace labyrinth_gamе.Views
                     if (newCol < 0)
                         continue;
                 }
-                if (maze[newRow, newCol] == (int)TileType.Wall)
+
+                if (_levelBase.maze[newRow, newCol] == (int)TileType.Wall)
                 {
-                    maze[newRow, newCol] = (int)TileType.Path;
-                    maze[(newRow + row) / 2, (newCol + col) / 2] = (int)TileType.Path;
+                    _levelBase.maze[newRow, newCol] = (int)TileType.Path;
+                    _levelBase.maze[(newRow + row) / 2, (newCol + col) / 2] = (int)TileType.Path;
 
                     GenerateMazeRecursive(newRow, newCol, totalRows, totalCols);
                 }
             }
         }
+
         private void DrawPlayer()
         {
-            playerRect = new Rectangle();
-            playerRect.Width = tileSize;
-            playerRect.Height = tileSize;
-            playerRect.Fill = Brushes.MediumVioletRed;
-            int startRow = maze.GetLength(0) / 2;
+            _levelBase.playerRect = new Rectangle();
+            _levelBase.playerRect.Width = _levelBase.tileSize;
+            _levelBase.playerRect.Height = _levelBase.tileSize;
+            _levelBase.playerRect.Fill = Brushes.MediumVioletRed;
+            int startRow = _levelBase.maze.GetLength(0) / 2;
             int startCol = 0;
-            playerRect.SetValue(Canvas.LeftProperty, (double)startCol * tileSize);
-            playerRect.SetValue(Canvas.TopProperty, (double)startRow * tileSize);
-            Canvas.SetTop(playerRect, entranceRow * tileSize);
-            Canvas.SetLeft(playerRect, entranceCol * tileSize);
-            canvas_1.Children.Add(playerRect);
+            LevelBase.SetRectangleCoordinates(_levelBase.playerRect,
+                (double)startCol * _levelBase.tileSize,
+                (double)startRow * _levelBase.tileSize);
+            Canvas.SetTop(_levelBase.playerRect, _levelBase.entranceRow * _levelBase.tileSize);
+            Canvas.SetLeft(_levelBase.playerRect, _levelBase.entranceCol * _levelBase.tileSize);
+            canvas_1.Children.Add(_levelBase.playerRect);
         }
+
         private void DrawMaze()
         {
-            for (int row = 0; row < maze.GetLength(0); row++)
+            for (int row = 0; row < _levelBase.maze.GetLength(0); row++)
             {
-                for (int col = 0; col < maze.GetLength(1); col++)
+                for (int col = 0; col < _levelBase.maze.GetLength(1); col++)
                 {
                     Rectangle rect = new Rectangle();
-                    rect.Width = tileSize;
-                    rect.Height = tileSize;
-                    rect.SetValue(Canvas.LeftProperty, (double)col * tileSize);
-                    rect.SetValue(Canvas.TopProperty, (double)row * tileSize);
+                    rect.Width = _levelBase.tileSize;
+                    rect.Height = _levelBase.tileSize;
+                    LevelBase.SetRectangleCoordinates(rect,
+                        (double)col * _levelBase.tileSize,
+                        (double)row * _levelBase.tileSize);
 
-                    switch ((TileType)maze[row, col])
+                    switch ((TileType)_levelBase.maze[row, col])
                     {
                         case TileType.Wall:
                             rect.Fill = Brushes.DarkMagenta;
@@ -187,61 +191,69 @@ namespace labyrinth_gamе.Views
                             break;
                         case TileType.End:
                             rect.Fill = Brushes.MediumVioletRed;
-                            exitRow = row;
-                            exitCol = col;
+                            _levelBase.exitRow = row;
+                            _levelBase.exitCol = col;
                             break;
                         default:
                             break;
                     }
-                    if ((TileType)maze[row, col] == TileType.Start)
+
+                    if ((TileType)_levelBase.maze[row, col] == TileType.Start)
                     {
-                        entranceRow = row;
-                        entranceCol = col;
+                        _levelBase.entranceRow = row;
+                        _levelBase.entranceCol = col;
                         rect.Fill = Brushes.MediumPurple;
                     }
+
                     canvas_1.Children.Add(rect);
                 }
             }
+
             foreach (var diamond in diamonds)
             {
                 if (!diamond.IsCollected)
                 {
                     Image diamondImage = new Image();
-                    diamondImage.Width = tileSize;
-                    diamondImage.Height = tileSize;
+                    diamondImage.Width = _levelBase.tileSize;
+                    diamondImage.Height = _levelBase.tileSize;
                     var uri = new Uri("pack://application:,,,/Views/diamond.png", UriKind.Absolute);
                     diamondImage.Source = new BitmapImage(uri);
 
-                    Canvas.SetLeft(diamondImage, diamond.Col * tileSize);
-                    Canvas.SetTop(diamondImage, diamond.Row * tileSize);
+                    Canvas.SetLeft(diamondImage, diamond.Col * _levelBase.tileSize);
+                    Canvas.SetTop(diamondImage, diamond.Row * _levelBase.tileSize);
 
                     canvas_1.Children.Add(diamondImage);
                     diamond.Image = diamondImage;
                 }
             }
         }
+
         private void MovePlayer(int deltaX, int deltaY)
         {
-            double newX = Canvas.GetLeft(playerRect) + deltaX;
-            double newY = Canvas.GetTop(playerRect) + deltaY;
+            double newX = Canvas.GetLeft(_levelBase.playerRect) + deltaX;
+            double newY = Canvas.GetTop(_levelBase.playerRect) + deltaY;
 
-            int newCol = (int)(newX / tileSize);
-            int newRow = (int)(newY / tileSize);
-            if (newRow >= 0 && newRow < maze.GetLength(0) && newCol >= 0 && newCol < maze.GetLength(1))
+            int newCol = (int)(newX / _levelBase.tileSize);
+            int newRow = (int)(newY / _levelBase.tileSize);
+            if (newRow >= 0 && newRow < _levelBase.maze.GetLength(0) && newCol >= 0 &&
+                newCol < _levelBase.maze.GetLength(1))
             {
-                if (maze[newRow, newCol] != (int)TileType.Wall)
+                if (_levelBase.maze[newRow, newCol] != (int)TileType.Wall)
                 {
-                    if ((Math.Abs(newRow - (int)(Canvas.GetTop(playerRect) / tileSize)) == 1 && newCol == (int)(Canvas.GetLeft(playerRect) / tileSize) && maze[newRow, newCol] != (int)Views.TileType.Wall)
-                        || (Math.Abs(newCol - (int)(Canvas.GetLeft(playerRect) / tileSize)) == 1 && newRow == (int)(Canvas.GetTop(playerRect) / tileSize) && maze[newRow, newCol] != (int)Views.TileType.Wall))
+                    if ((Math.Abs(newRow - (int)(Canvas.GetTop(_levelBase.playerRect) / _levelBase.tileSize)) == 1 &&
+                         newCol == (int)(Canvas.GetLeft(_levelBase.playerRect) / _levelBase.tileSize) &&
+                         _levelBase.maze[newRow, newCol] != (int)Views.TileType.Wall)
+                        || (Math.Abs(newCol - (int)(Canvas.GetLeft(_levelBase.playerRect) / _levelBase.tileSize)) ==
+                            1 && newRow == (int)(Canvas.GetTop(_levelBase.playerRect) / _levelBase.tileSize) &&
+                            _levelBase.maze[newRow, newCol] != (int)Views.TileType.Wall))
                     {
-                        playerRect.SetValue(Canvas.LeftProperty, newX);
-                        playerRect.SetValue(Canvas.TopProperty, newY);
+                        LevelBase.SetRectangleCoordinates(_levelBase.playerRect, newX, newY);
 
                         foreach (Diamond diamond in diamonds)
                         {
                             if (newRow == diamond.Row && newCol == diamond.Col)
                             {
-                                maze[diamond.Row, diamond.Col] = (int)TileType.Path;
+                                _levelBase.maze[diamond.Row, diamond.Col] = (int)TileType.Path;
                                 diamonds.Remove(diamond);
                                 collectedDiamonds++;
                                 diamondsTextBlock.Text = "Діаманти: " + collectedDiamonds;
@@ -250,42 +262,48 @@ namespace labyrinth_gamе.Views
                                 break;
                             }
                         }
-                        if (newRow == exitRow && newCol == exitCol)
+
+                        if (newRow == _levelBase.exitRow && newCol == _levelBase.exitCol)
                         {
                             if (diamonds.Count == 0)
                             {
-                                timer.Stop();
-                                timeTaken = timeElapsed;
+                                _levelBase.timer.Stop();
+                                _levelBase.timeTaken = _levelBase.timeElapsed;
                                 CustomMessageBox messageBox = new CustomMessageBox("");
                                 Record record = new Record
                                 {
                                     UserId = User.CurrentUser.UserId,
                                     UserName = User.CurrentUser.UserName,
                                     Level = 3,
-                                    Time = timeTaken + " сек"
+                                    Time = _levelBase.timeTaken + " сек"
                                 };
                                 using (var db = new DataBaseContext())
                                 {
                                     db.Records.Add(record);
                                     db.SaveChanges();
                                 }
-                                messageBox.messageBoxText.Text = $"Вітаємо, ви виграли! Витрачено часу: {timeTaken} секунд.";
+
+                                messageBox.messageBoxText.Text =
+                                    $"Вітаємо, ви виграли! Витрачено часу: {_levelBase.timeTaken} секунд.";
                                 messageBox.ShowDialog();
                                 Close();
                             }
                             else
                             {
-                                MessageBox.Show("Ви повинні зібрати всі діаманти до того, як дійдете до виходу.", "Не завершено");
+                                MessageBox.Show("Ви повинні зібрати всі діаманти до того, як дійдете до виходу.",
+                                    "Не завершено");
                             }
                         }
                     }
                 }
             }
         }
+
         public interface ICommand
         {
             void Execute();
         }
+
         public class MoveUpCommand : ICommand
         {
             private readonly Level_3 _level;
@@ -297,7 +315,7 @@ namespace labyrinth_gamе.Views
 
             public void Execute()
             {
-                _level.MovePlayer(0, -_level.tileSize);
+                _level.MovePlayer(0, -_level._levelBase.tileSize);
             }
         }
 
@@ -312,7 +330,7 @@ namespace labyrinth_gamе.Views
 
             public void Execute()
             {
-                _level.MovePlayer(0, _level.tileSize);
+                _level.MovePlayer(0, _level._levelBase.tileSize);
             }
         }
 
@@ -327,7 +345,7 @@ namespace labyrinth_gamе.Views
 
             public void Execute()
             {
-                _level.MovePlayer(-_level.tileSize, 0);
+                _level.MovePlayer(-_level._levelBase.tileSize, 0);
             }
         }
 
@@ -342,7 +360,7 @@ namespace labyrinth_gamе.Views
 
             public void Execute()
             {
-                _level.MovePlayer(_level.tileSize, 0);
+                _level.MovePlayer(_level._levelBase.tileSize, 0);
             }
         }
 
@@ -353,59 +371,63 @@ namespace labyrinth_gamе.Views
                 _commands[e.Key].Execute();
             }
         }
+
         private bool isPaused = false;
+
         private void Image_MouseDown_18(object sender, MouseButtonEventArgs e)
         {
             PauseGame();
         }
+
         private void PauseGame()
         {
             isPaused = true;
-            timer.Stop();
+            _levelBase.timer.Stop();
             MessageBox.Show("Гра призупинена. Натисніть ОК, щоб продовжити гру.");
             isPaused = false;
-            timer.Start();
+            _levelBase.timer.Start();
         }
+
         private void RestartGame()
         {
-
-            double x = entranceCol * tileSize;
-            double y = entranceRow * tileSize;
-            playerRect.SetValue(Canvas.LeftProperty, x);
-            playerRect.SetValue(Canvas.TopProperty, y);
+            double x = _levelBase.entranceCol * _levelBase.tileSize;
+            double y = _levelBase.entranceRow * _levelBase.tileSize;
+            LevelBase.SetRectangleCoordinates(_levelBase.playerRect, x, y);
             collectedDiamonds = 0;
             diamondsTextBlock.Text = "Діаманти: " + collectedDiamonds;
             GenerateMaze();
             DrawMaze();
             DrawPlayer();
-            if (!timer.IsEnabled)
+            if (!_levelBase.timer.IsEnabled)
             {
-                timeElapsed = 0;
-                timeTaken = 0;
-                timer.Start();
+                _levelBase.timeElapsed = 0;
+                _levelBase.timeTaken = 0;
+                _levelBase.timer.Start();
             }
         }
+
         private void Image_MouseDown_17(object sender, MouseButtonEventArgs e)
         {
             RestartGame();
         }
+
         private void Image_MouseDown_9(object sender, RoutedEventArgs e)
         {
             // Створення екземпляру фабрики користувачів
             IUserFactory userFactory = new UserFactory();
-            Frame frame = new Frame();
-            Window mainWindow = new MainWindow();
             // Передача фабрики користувачів у конструктор Labyrinth
-            frame.Navigate(new Labyrinth(new UserFactory()));
-            mainWindow.Content = frame;
-            mainWindow.Show();
-            this.Close();
+            NavigateToPage(new Labyrinth(userFactory));
         }
+
         private void Image_MouseDown_12(object sender, MouseButtonEventArgs e)
+        {
+            NavigateToPage(new Levels());
+        }
+        private void NavigateToPage(Page page)
         {
             Frame frame = new Frame();
             Window mainWindow = new MainWindow();
-            frame.Navigate(new Levels());
+            frame.Navigate(page);
             mainWindow.Content = frame;
             mainWindow.Show();
             this.Close();
