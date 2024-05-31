@@ -35,21 +35,21 @@ namespace labyrinth_gamе.Views
             Window window = Application.Current.MainWindow;
             Level_1 windowLevel1 = new Level_1();
             windowLevel1.Show();
-            window.Close();
+            window?.Close();
         }
         private void Button_Click_4(object sender, RoutedEventArgs e)
         {
             Window window = Application.Current.MainWindow;
             Level_2 windowLevel2 = new Level_2();
             windowLevel2.Show();
-            window.Close();
+            window?.Close();
         }
         private void Button_Click_5(object sender, RoutedEventArgs e)
         {
             Window window = Application.Current.MainWindow;
             Level_3 windowLevel3 = new Level_3();
             windowLevel3.Show();
-            window.Close();
+            window?.Close();
         }
     }
 }

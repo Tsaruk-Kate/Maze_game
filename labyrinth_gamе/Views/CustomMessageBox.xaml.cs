@@ -21,54 +21,51 @@ namespace labyrinth_gamе.Views
         {
             InitializeComponent();
         }
+
         public static bool? Show(string message)
         {
             return CreateCustomMessageBox(message).ShowDialog();
         }
+
         private static CustomMessageBox CreateCustomMessageBox(string message)
         {
             var customMessageBox = new CustomMessageBox(message);
             return customMessageBox;
         }
+
         private void Button_Home(object sender, RoutedEventArgs e)
         {
             // Створення екземпляру фабрики користувачів
             IUserFactory userFactory = new UserFactory();
-            Frame frame = new Frame();
-            Window mainWindow = new MainWindow();
             // Передача фабрики користувачів у конструктор Labyrinth
-            frame.Navigate(new Labyrinth(new UserFactory()));
-            mainWindow.Content = frame;
-            mainWindow.Show();
-            this.Close();
+            NavigateToPage(new Labyrinth(userFactory));
         }
+
         private void Button_Levels(object sender, RoutedEventArgs e)
         {
-            Frame frame = new Frame();
-            Window mainWindow = new MainWindow();
-            frame.Navigate(new Levels());
-            mainWindow.Content = frame;
-            mainWindow.Show();
-            this.Close();
+            NavigateToPage(new Levels());
         }
+
         private void Button_Exit(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
+
         private void Button_Results(object sender, RoutedEventArgs e)
         {
-            Frame frame = new Frame();
-            Window mainWindow = new MainWindow();
-            frame.Navigate(new Results());
-            mainWindow.Content = frame;
-            mainWindow.Show();
-            this.Close();
+            NavigateToPage(new Results());
         }
+
         private void Button_Rules(object sender, RoutedEventArgs e)
+        {
+            NavigateToPage(new Rules());
+        }
+
+        private void NavigateToPage(Page page)
         {
             Frame frame = new Frame();
             Window mainWindow = new MainWindow();
-            frame.Navigate(new Rules());
+            frame.Navigate(page);
             mainWindow.Content = frame;
             mainWindow.Show();
             this.Close();
